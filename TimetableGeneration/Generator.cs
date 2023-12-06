@@ -17,8 +17,8 @@ public class Generator
                 var lessonAssigned = false;
                 while (!lessonAssigned)
                 {
-                    var index = random.Next(0, 4);
-                    if (timetable.GetDayLengthByIndex(index) > 9) continue;
+                    var index = random.Next(0, 5);
+                    if (timetable.GetDayLengthByIndex(index) > 8) continue;
 
                     if (timetable.GetDayLengthByIndex(index) == 6)
                     {
@@ -31,6 +31,7 @@ public class Generator
                         lessonAssigned = true;
                     }
                 }
+                CLI.WriteLine(timetable.ToString(), ConsoleColor.Magenta);
             }
         }
 

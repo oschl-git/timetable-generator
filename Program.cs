@@ -1,3 +1,3 @@
 ﻿using TimetableGenerator.TimetableGeneration;
 
-Console.WriteLine(Generator.GeneratePossibleTimetable());
+Generator.GeneratePossibleTimetable();
