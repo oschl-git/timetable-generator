@@ -8,30 +8,31 @@ public class Generator
     public static TimetableEntity GeneratePossibleTimetable()
     {
         var timetable = new TimetableEntity();
-        var subjects = CollectionRandomizer.ShuffleDictionary(Subjects.LessonFrequency);
+        var timetableEntries = CollectionRandomizer.ShuffleList(Subjects.GetTimetableEntries());
         var random = new Random();
-        foreach (var (lesson, frequency) in Subjects.LessonFrequency)
+        foreach (var entry in timetableEntries)
         {
-            for (var i = 0; i < frequency; i++)
+            var lessonAssigned = false;
+            while (!lessonAssigned)
             {
-                var lessonAssigned = false;
-                while (!lessonAssigned)
-                {
-                    var index = random.Next(0, 5);
-                    if (timetable.GetDayLengthByIndex(index) > 8) continue;
+                var index = random.Next(0, 5);
+                if (timetable.GetDayLengthByIndex(index) > 7) continue;
 
-                    if (timetable.GetDayLengthByIndex(index) == 6)
+                foreach (var lesson in entry)
+                {
+                    var includeLunchBreak = timetable.GetDayLengthByIndex(index) == 6;
+                    var dayLength = timetable.GetDayLengthByIndex(index);
+                    
+                    if (includeLunchBreak)
                     {
-                        timetable.Days.ElementAt(index).Value[timetable.GetDayLengthByIndex(index) + 1] = lesson;
-                        lessonAssigned = true;
+                        timetable.Days.ElementAt(index).Value[dayLength + 1] = lesson;
                     }
                     else
                     {
-                        timetable.Days.ElementAt(index).Value[timetable.GetDayLengthByIndex(index)] = lesson;
-                        lessonAssigned = true;
+                        timetable.Days.ElementAt(index).Value[dayLength] = lesson;
                     }
                 }
-                CLI.WriteLine(timetable.ToString(), ConsoleColor.Magenta);
+                lessonAssigned = true;
             }
         }
 

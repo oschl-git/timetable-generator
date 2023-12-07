@@ -43,16 +43,20 @@ public abstract class Subjects
         { new LessonEntity(SubjectTypes.AM, "Filip Kallmünzer", "25", false), 2 },
     };
 
-    public static List<LessonEntity> GetLessonList()
+    public static IEnumerable<LessonEntity[]> GetTimetableEntries()
     {
-        var lessonList = new List<LessonEntity>();
-        foreach (var lesson in LessonFrequency)
+        var entries = new List<LessonEntity[]>();
+        foreach (var (lesson, frequency) in LessonFrequency)
         {
-            for (var i = 0; i < lesson.Value; i++)
+            if (lesson.IsPracticalLesson)
             {
-                lessonList.Add(lesson.Key);
+                entries.Add(Enumerable.Repeat(lesson, frequency).ToArray());
+            }
+            else
+            {
+                for (var i = 0; i < frequency; i++) entries.Add(new[]{lesson});
             }
         }
-        return lessonList;
+        return entries;
     }
 }

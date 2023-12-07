@@ -1,10 +1,11 @@
 using System.Text;
+using TimetableGenerator.Helpers;
 
 namespace TimetableGenerator.TimetableGeneration.Entities;
 
 public class TimetableEntity
 {
-    public Dictionary<string, LessonEntity?[]> Days { set; get; } = new()
+    public Dictionary<string, LessonEntity?[]> Days { get; } = new()
     {
         { "Monday", new LessonEntity?[9] },
         { "Tuesday", new LessonEntity?[9] },
@@ -23,7 +24,7 @@ public class TimetableEntity
         {
             if (hour == null)
             {
-                if (lastItemWasNull) return length - 1;
+                if (lastItemWasNull) break;
                 lastItemWasNull = true;
             }
             else lastItemWasNull = false;
@@ -31,24 +32,26 @@ public class TimetableEntity
             length++;
         }
 
-        return length;
+        return !lastItemWasNull ? length : length - 1;
     }
 
-    public override string ToString()
+    public List<ColoredString> ToColoredStringArray()
     {
-        StringBuilder output = new();
+        var output = new List<ColoredString>();
         foreach (var (day, lessons) in Days)
         {
-            output.Append($"{day}:");
+            output.Add(new ColoredString($"{day}:"));
             foreach (var lesson in lessons)
             {
-                if (lesson == null) output.Append($" VOLNO");
-                else output.Append($" {lesson.Subject}");
+                output.Add(lesson == null
+                    ? new ColoredString(" .", ConsoleColor.Gray)
+                    : new ColoredString($" {lesson.Subject}",
+                        lesson.IsPracticalLesson ? ConsoleColor.Red : ConsoleColor.Blue));
             }
 
-            output.AppendLine();
+            output.Add(new ColoredString("\n"));
         }
 
-        return output.ToString();
+        return output;
     }
 }
