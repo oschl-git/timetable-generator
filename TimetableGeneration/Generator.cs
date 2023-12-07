@@ -10,7 +10,7 @@ public class Generator
         var timetable = new TimetableEntity();
         var timetableEntries = CollectionRandomizer.ShuffleList(Subjects.GetTimetableEntries());
         var random = new Random();
-        
+
         foreach (var entry in timetableEntries)
         {
             var lessonAssigned = false;
@@ -23,9 +23,9 @@ public class Generator
 
                 foreach (var lesson in entry)
                 {
-                    var includeLunchBreak = timetable.GetDayLengthByIndex(index) == 6;
                     var dayLength = timetable.GetDayLengthByIndex(index);
-                    
+
+                    var includeLunchBreak = timetable.GetDayLengthByIndex(index) == 6;
                     if (includeLunchBreak)
                     {
                         timetable.Days.ElementAt(index).Value[dayLength + 1] = lesson;
@@ -35,6 +35,7 @@ public class Generator
                         timetable.Days.ElementAt(index).Value[dayLength] = lesson;
                     }
                 }
+
                 lessonAssigned = true;
             }
         }

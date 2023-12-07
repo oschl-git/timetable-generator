@@ -39,15 +39,20 @@ public class TimetableEntity
     {
         var output = new List<ColoredString>();
         output.Add(new ColoredString(GetTimetableHeader() + "\n", ConsoleColor.Gray));
+        
         foreach (var (day, lessons) in Days)
         {
-            output.Add(new ColoredString(StringProcessor.AddFillerSpaces($"{day}:", 10), ConsoleColor.Gray));
+            output.Add(new ColoredString(
+                StringProcessor.AddFillerSpaces($"{day}:", 10), ConsoleColor.Gray)
+            );
             foreach (var lesson in lessons)
             {
                 output.Add(lesson == null
                     ? new ColoredString(" [   ]", ConsoleColor.DarkGray)
-                    : new ColoredString($" [{StringProcessor.AddFillerSpaces(lesson.Subject.ToString(), 3)}]",
-                        lesson.IsPracticalLesson ? ConsoleColor.Red : ConsoleColor.Blue));
+                    : new ColoredString(
+                        $" [{StringProcessor.AddFillerSpaces(lesson.Subject.ToString(), 3)}]",
+                        lesson.IsPracticalLesson ? ConsoleColor.Red : ConsoleColor.Blue
+                    ));
             }
 
             output.Add(new ColoredString("\n"));

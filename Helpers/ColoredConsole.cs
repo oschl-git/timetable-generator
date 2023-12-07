@@ -20,7 +20,8 @@ public static class ColoredConsole
     }
 
     public static void WriteWithPrefix(
-        string content, string prefix = DefaultPrefix,
+        string content = "",
+        string prefix = DefaultPrefix,
         ConsoleColor contentColor = DefaultColor,
         ConsoleColor prefixColor = DefaultPrefixColor
     )
@@ -30,7 +31,8 @@ public static class ColoredConsole
     }
 
     public static void WriteLineWithPrefix(
-        string content, string prefix = DefaultPrefix,
+        string content = "",
+        string prefix = DefaultPrefix,
         ConsoleColor contentColor = DefaultColor,
         ConsoleColor prefixColor = DefaultPrefixColor
     )
