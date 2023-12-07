@@ -4,6 +4,6 @@ using TimetableGenerator.TimetableGeneration.Entities;
 
 for (var i = 0; i < 10; i++)
 {
-    ColoredConsole.WriteArray(Generator.GeneratePossibleTimetable().ToColoredStringArray());
+    ColoredConsole.WriteArray(Generator.GeneratePossibleTimetable().ToColoredStringList());
     ColoredConsole.WriteLine();
 }

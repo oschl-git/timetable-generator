@@ -35,17 +35,18 @@ public class TimetableEntity
         return !lastItemWasNull ? length : length - 1;
     }
 
-    public List<ColoredString> ToColoredStringArray()
+    public IEnumerable<ColoredString> ToColoredStringList()
     {
         var output = new List<ColoredString>();
+        output.Add(new ColoredString(GetTimetableHeader() + "\n", ConsoleColor.Gray));
         foreach (var (day, lessons) in Days)
         {
-            output.Add(new ColoredString($"{day}:"));
+            output.Add(new ColoredString(StringProcessor.AddFillerSpaces($"{day}:", 10), ConsoleColor.Gray));
             foreach (var lesson in lessons)
             {
                 output.Add(lesson == null
-                    ? new ColoredString(" .", ConsoleColor.Gray)
-                    : new ColoredString($" {lesson.Subject}",
+                    ? new ColoredString(" [   ]", ConsoleColor.DarkGray)
+                    : new ColoredString($" [{StringProcessor.AddFillerSpaces(lesson.Subject.ToString(), 3)}]",
                         lesson.IsPracticalLesson ? ConsoleColor.Red : ConsoleColor.Blue));
             }
 
@@ -53,5 +54,16 @@ public class TimetableEntity
         }
 
         return output;
+
+        string GetTimetableHeader()
+        {
+            StringBuilder builder = new("             ");
+            for (var i = 0; i < 9; i++)
+            {
+                builder.Append($"{i + 1}     ");
+            }
+
+            return builder.ToString();
+        }
     }
 }
