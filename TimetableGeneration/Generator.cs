@@ -3,7 +3,7 @@ using TimetableGenerator.TimetableGeneration.Entities;
 
 namespace TimetableGenerator.TimetableGeneration;
 
-public class Generator
+public abstract class Generator
 {
     public static TimetableEntity GeneratePossibleTimetable()
     {
@@ -24,7 +24,7 @@ public class Generator
                 foreach (var lesson in entry)
                 {
                     var dayLength = timetable.GetDayLengthByIndex(index);
-
+ 
                     var includeLunchBreak = timetable.GetDayLengthByIndex(index) == 6;
                     if (includeLunchBreak)
                     {
