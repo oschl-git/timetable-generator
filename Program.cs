@@ -41,7 +41,6 @@ if (resultsToKeepInput == null || !int.TryParse(resultsToKeepInput, out _))
 
 var resultsToKeep = int.Parse(resultsToKeepInput);
 
-ColoredConsole.WriteLine("Generating...", ConsoleColor.Green);
 var threadManager = new ThreadManager(secondsToLive, resultsToKeep);
 var result = threadManager.ProcessTimetableGeneration();
 ColoredConsole.WriteArray(result.ToColoredStringList());

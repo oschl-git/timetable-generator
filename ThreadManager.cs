@@ -9,10 +9,10 @@ namespace TimetableGenerator;
 public class ThreadManager
 {
     public GenerationResultEntity Result { get; }
-
+    public bool Running { get; set; }
+    
     private List<Thread> threads;
     private int secondsToLive;
-    private bool running;
     
     /// <summary>
     /// Constructs the ThreadManager.
@@ -34,12 +34,17 @@ public class ThreadManager
 
         if (generatorThreadCount < 1) generatorThreadCount = 1;
         if (evaluatorThreadCount < 1) evaluatorThreadCount = 1;
+        
+        threads.Add(new Thread(() =>
+        {
+            Watchdog.Watch(secondsToLive, this);
+        }));
 
         for (var i = 0; i < generatorThreadCount; i++)
         {
             threads.Add(new Thread(() =>
             {
-                while (running)
+                while (Running)
                 {
                     Result.EnqueueUnevaluatedTimetable(Generator.GeneratePossibleTimetable());
                 }
@@ -50,7 +55,7 @@ public class ThreadManager
         {
             threads.Add(new Thread(() =>
             {
-                while (running)
+                while (Running)
                 {
                     var timetable = Result.DequeueUnevaluatedTimetable();
                     if (timetable == null) continue;
@@ -60,13 +65,6 @@ public class ThreadManager
                 }
             }));
         }
-        
-        // Watchdog thread:
-        threads.Add(new Thread(() =>
-        {
-            Thread.Sleep(secondsToLive * 1000);
-            running = false;
-        }));
     }
 
     /// <summary>
@@ -75,7 +73,6 @@ public class ThreadManager
     /// <returns>GenerationResultEntity with information about what was generated.</returns>
     public GenerationResultEntity ProcessTimetableGeneration()
     {
-        running = true;
         foreach (var thread in threads) thread.Start();
         foreach (var thread in threads) thread.Join();
 
