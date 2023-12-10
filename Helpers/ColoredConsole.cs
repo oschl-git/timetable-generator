@@ -30,7 +30,7 @@ public static class ColoredConsole
     {
         Write(content + "\n", color);
     }
-    
+
     /// <summary>
     /// Writes the provided string with a prefix with the provided colors for each.
     /// </summary>
@@ -66,7 +66,7 @@ public static class ColoredConsole
         WriteWithPrefix(content, prefix, contentColor, prefixColor);
         Console.Write("\n");
     }
-    
+
     /// <summary>
     /// Writes ColoredStrings provided in a collection.
     /// </summary>
@@ -77,5 +77,34 @@ public static class ColoredConsole
         {
             Write(coloredString.Content, coloredString.Color);
         }
+    }
+
+    public static string? GetInputFromUser(
+        string prompt,
+        Func<string?, (bool, string?)>[]? conditions = null,
+        string? tryAgainPrompt = null
+    )
+    {
+        tryAgainPrompt ??= prompt;
+        Write(prompt, ConsoleColor.Gray);
+
+        var inputIsOk = false;
+        string? value = null;
+        while (!inputIsOk)
+        {
+            value = Console.ReadLine();
+            
+            inputIsOk = true;
+            if (conditions == null) break;
+            foreach (var condition in conditions)
+            {
+                var conditionResult = condition(value);
+                inputIsOk = inputIsOk && conditionResult.Item1;
+                if (!inputIsOk && conditionResult.Item2 != null) WriteLine(conditionResult.Item2, ConsoleColor.Red);
+            }
+            if (!inputIsOk) Write(tryAgainPrompt, ConsoleColor.Gray);
+        }
+
+        return value;
     }
 }

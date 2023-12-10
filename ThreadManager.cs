@@ -12,8 +12,8 @@ public class ThreadManager
 
     private List<Thread> threads;
     private int secondsToLive;
-    private bool running = false;
-
+    private bool running;
+    
     /// <summary>
     /// Constructs the ThreadManager.
     /// </summary>
@@ -24,7 +24,6 @@ public class ThreadManager
         threads = new List<Thread>();
         this.secondsToLive = secondsToLive;
         Result = new GenerationResultEntity(resultsToKeep);
-
         CreateThreads();
     }
     
