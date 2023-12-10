@@ -1,15 +1,6 @@
 ﻿using TimetableGenerator;
 using TimetableGenerator.Helpers;
-using TimetableGenerator.TimetableGeneration;
-using TimetableGenerator.TimetableGeneration.Entities;
 
-var threadManager = new ThreadManager();
-return;
-
-for (var i = 0; i < 10; i++)
-{
-    var timetable = Generator.GeneratePossibleTimetable();
-    ColoredConsole.WriteArray(timetable.ToColoredStringList());
-    ColoredConsole.WriteLine("Rating: " + Evaluator.EvaluateTimetable(timetable), ConsoleColor.Green);
-    ColoredConsole.WriteLine();
-}
+var threadManager = new ThreadManager(60);
+var result = threadManager.ProcessTimetableGeneration();
+ColoredConsole.WriteArray(result.ToColoredStringList());

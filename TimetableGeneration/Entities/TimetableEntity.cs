@@ -5,7 +5,7 @@ namespace TimetableGenerator.TimetableGeneration.Entities;
 
 public class TimetableEntity
 {
-    public Dictionary<string, LessonEntity?[]> Days { get; } = new()
+    public Dictionary<string, LessonEntity?[]> Days { get; protected init; } = new()
     {
         { "Monday", new LessonEntity?[9] },
         { "Tuesday", new LessonEntity?[9] },
@@ -35,7 +35,7 @@ public class TimetableEntity
         return !lastItemWasNull ? length : length - 1;
     }
 
-    public IEnumerable<ColoredString> ToColoredStringList()
+    public virtual IEnumerable<ColoredString> ToColoredStringList()
     {
         var output = new List<ColoredString>();
         output.Add(new ColoredString(GetTimetableHeader() + "\n", ConsoleColor.Gray));
