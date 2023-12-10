@@ -2,8 +2,16 @@ using TimetableGenerator.TimetableGeneration.Entities;
 
 namespace TimetableGenerator.TimetableGeneration;
 
+/// <summary>
+/// An abstract class which evaluates timetables and gives each a corresponding score.
+/// </summary>
 public abstract class Evaluator
 {
+    /// <summary>
+    /// Evaluates a timetable.
+    /// </summary>
+    /// <param name="timetable">The timetable to evaluate.</param>
+    /// <returns>The score given to the timetable.</returns>
     public static int EvaluateTimetable(TimetableEntity timetable)
     {
         var score = 1000;

@@ -3,6 +3,9 @@ using TimetableGenerator.Helpers;
 
 namespace TimetableGenerator.TimetableGeneration.Entities;
 
+/// <summary>
+/// An object which represents a timetable.
+/// </summary>
 public class TimetableEntity
 {
     public Dictionary<string, LessonEntity?[]> Days { get; protected init; } = new()
@@ -14,6 +17,11 @@ public class TimetableEntity
         { "Friday", new LessonEntity?[9] },
     };
 
+    /// <summary>
+    /// The length of each day. Assumes that there are only 1 hour breaks for lunch, which are included in the length.
+    /// </summary>
+    /// <param name="index">The day index. E. g. 1 for Tuesday.</param>
+    /// <returns>The length of the day.</returns>
     public int GetDayLengthByIndex(int index)
     {
         var day = Days.ElementAt(index).Value;
@@ -35,6 +43,10 @@ public class TimetableEntity
         return !lastItemWasNull ? length : length - 1;
     }
 
+    /// <summary>
+    /// Converts the timetable into a pretty and printable ColoredString List.
+    /// </summary>
+    /// <returns>A List of ColoredStrings.</returns>
     public virtual IEnumerable<ColoredString> ToColoredStringList()
     {
         var output = new List<ColoredString>();

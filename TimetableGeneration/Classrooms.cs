@@ -1,5 +1,8 @@
 namespace TimetableGenerator.TimetableGeneration;
 
+/// <summary>
+/// An abstract class with information about classrooms.
+/// </summary>
 public abstract class Classrooms
 {
     public static Dictionary<string, int> ClassroomsAndFloors { get; } = new()

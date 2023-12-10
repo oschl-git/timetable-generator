@@ -3,6 +3,9 @@ using TimetableGenerator.Helpers;
 
 namespace TimetableGenerator.TimetableGeneration.Entities;
 
+/// <summary>
+/// Contains all relevant results of timetable generation.
+/// </summary>
 public class GenerationResultEntity
 {
     private int resultsToKeep;
@@ -19,6 +22,10 @@ public class GenerationResultEntity
         this.resultsToKeep = resultsToKeep;
     }
 
+    /// <summary>
+    /// Adds an unevaluated timetable to the queue.
+    /// </summary>
+    /// <param name="timetable">The timetable to add.</param>
     public void EnqueueUnevaluatedTimetable(TimetableEntity timetable)
     {
         lock (locker)
@@ -29,6 +36,10 @@ public class GenerationResultEntity
         }
     }
 
+    /// <summary>
+    /// Removes a timetable from the unevaluated timetables queue and returns it.
+    /// </summary>
+    /// <returns>The unevaluated timetable.</returns>
     public TimetableEntity? DequeueUnevaluatedTimetable()
     {
         lock (locker)
@@ -37,6 +48,11 @@ public class GenerationResultEntity
         }
     }
 
+    /// <summary>
+    /// Adds an evaluated timetable to its correct sorted position in the evaluated timetables OrderedList.
+    /// Ensures the list doesn't include more items than specified in the resultsToKeep property.
+    /// </summary>
+    /// <param name="evaluatedTimetable">The evaluated timetable to add.</param>
     public void AddEvaluatedTimetable(EvaluatedTimetableEntity evaluatedTimetable)
     {
         lock (locker)
@@ -54,6 +70,10 @@ public class GenerationResultEntity
         }
     }
 
+    /// <summary>
+    /// Converts the result into a pretty and printable ColoredString List.
+    /// </summary>
+    /// <returns>A List of ColoredStrings.</returns>
     public virtual IEnumerable<ColoredString> ToColoredStringList()
     {
         var output = new List<ColoredString>();

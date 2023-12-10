@@ -2,6 +2,9 @@ using TimetableGenerator.TimetableGeneration.Entities;
 
 namespace TimetableGenerator.TimetableGeneration;
 
+/// <summary>
+/// An abstract class which includes information about subjects.
+/// </summary>
 public abstract class Subjects
 {
     public enum SubjectTypes
@@ -43,6 +46,11 @@ public abstract class Subjects
         { new LessonEntity(SubjectTypes.AM, "Filip Kallmünzer", "25", false), 2 },
     };
 
+    /// <summary>
+    /// Returns a collection of arrays of timetable entries.
+    /// Each entry includes one or more lessons which should be consecutive in a timetable.
+    /// </summary>
+    /// <returns>A collection of arrays which represent timetable entries.</returns>
     public static IEnumerable<LessonEntity[]> GetTimetableEntries()
     {
         var entries = new List<LessonEntity[]>();

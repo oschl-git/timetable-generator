@@ -1,5 +1,8 @@
 namespace TimetableGenerator.TimetableGeneration.Entities;
 
+/// <summary>
+/// An object which represents a lesson.
+/// </summary>
 public class LessonEntity
 {
     public Subjects.SubjectTypes Subject { get; }

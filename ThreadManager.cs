@@ -3,6 +3,9 @@ using TimetableGenerator.TimetableGeneration.Entities;
 
 namespace TimetableGenerator;
 
+/// <summary>
+/// Manages threads for multi-threaded generation of timetables.
+/// </summary>
 public class ThreadManager
 {
     public GenerationResultEntity Result { get; }
@@ -11,6 +14,11 @@ public class ThreadManager
     private int secondsToLive;
     private bool running = false;
 
+    /// <summary>
+    /// Constructs the ThreadManager.
+    /// </summary>
+    /// <param name="secondsToLive">How long to generate for.</param>
+    /// <param name="resultsToKeep">How many of the best results to keep and include in the result.</param>
     public ThreadManager(int secondsToLive = 60, int resultsToKeep = 100)
     {
         threads = new List<Thread>();
@@ -19,7 +27,7 @@ public class ThreadManager
 
         CreateThreads();
     }
-
+    
     private void CreateThreads()
     {
         var generatorThreadCount = Environment.ProcessorCount / 2;
@@ -62,6 +70,10 @@ public class ThreadManager
         }));
     }
 
+    /// <summary>
+    /// Processes timetable generation for amount of seconds specified in the class constructor.
+    /// </summary>
+    /// <returns>GenerationResultEntity with information about what was generated.</returns>
     public GenerationResultEntity ProcessTimetableGeneration()
     {
         running = true;

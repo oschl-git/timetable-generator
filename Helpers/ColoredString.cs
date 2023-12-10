@@ -1,5 +1,8 @@
 namespace TimetableGenerator.Helpers;
 
+/// <summary>
+/// A string object with a color.
+/// </summary>
 public class ColoredString
 {
     public string Content { get; }

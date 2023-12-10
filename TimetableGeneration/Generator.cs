@@ -3,8 +3,15 @@ using TimetableGenerator.TimetableGeneration.Entities;
 
 namespace TimetableGenerator.TimetableGeneration;
 
+/// <summary>
+/// An abstract class which generates timetables.
+/// </summary>
 public abstract class Generator
 {
+    /// <summary>
+    /// Generates a random timetable.
+    /// </summary>
+    /// <returns>The timetable.</returns>
     public static TimetableEntity GeneratePossibleTimetable()
     {
         var timetable = new TimetableEntity();
