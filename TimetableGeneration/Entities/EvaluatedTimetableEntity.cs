@@ -7,7 +7,7 @@ namespace TimetableGenerator.TimetableGeneration.Entities;
 /// </summary>
 public class EvaluatedTimetableEntity : TimetableEntity, IComparable<EvaluatedTimetableEntity>
 {
-    public int Score { get; }
+    public int Score { get; protected init; }
 
     public EvaluatedTimetableEntity(TimetableEntity timetable, int score)
     {
@@ -26,8 +26,14 @@ public class EvaluatedTimetableEntity : TimetableEntity, IComparable<EvaluatedTi
     /// Converts the timetable into a pretty and printable ColoredString List which includes the score.
     /// </summary>
     /// <returns>A List of ColoredStrings.</returns>
-    public override IEnumerable<ColoredString> ToColoredStringList()
+    public override List<ColoredString> ToColoredStringList()
     {
-        return base.ToColoredStringList().Append(new ColoredString($"Score: {Score}", ConsoleColor.Magenta));
+        var output = base.ToColoredStringList();
+        output.Add(new ColoredString("> ", ConsoleColor.DarkGray));
+        output.Add(new ColoredString("Score: "));
+        output.Add(new ColoredString(Score.ToString(), ConsoleColor.Magenta));
+        output.Add(new ColoredString("\n"));
+
+        return output;
     }
 }

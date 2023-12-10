@@ -47,7 +47,7 @@ public class TimetableEntity
     /// Converts the timetable into a pretty and printable ColoredString List.
     /// </summary>
     /// <returns>A List of ColoredStrings.</returns>
-    public virtual IEnumerable<ColoredString> ToColoredStringList()
+    public virtual List<ColoredString> ToColoredStringList()
     {
         var output = new List<ColoredString>();
         output.Add(new ColoredString(GetTimetableHeader() + "\n", ConsoleColor.Gray));

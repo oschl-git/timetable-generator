@@ -14,6 +14,9 @@ public class GenerationResultEntity
     public OrderedList<EvaluatedTimetableEntity> evaluatedTimetables { get; } = new();
     public int GeneratedTimetablesCount { set; get; }
     public int EvaluatedTimetablesCount { set; get; }
+    public int TimetablesBetterThanOriginalCount { set; get; }
+    
+    private int originalTimetableScore = new OriginalTimetableEntity().Score;
 
     private readonly object locker = new();
 
@@ -58,6 +61,8 @@ public class GenerationResultEntity
         lock (locker)
         {
             EvaluatedTimetablesCount++;
+
+            if (evaluatedTimetable.Score > originalTimetableScore) TimetablesBetterThanOriginalCount++;
             
             if (evaluatedTimetables.Count > 0 && evaluatedTimetable.Score <= evaluatedTimetables[^1].Score) return;
             
@@ -78,11 +83,19 @@ public class GenerationResultEntity
     {
         var output = new List<ColoredString>();
 
-        foreach (var timetable in evaluatedTimetables)
+        var reversedList = new List<TimetableEntity>(evaluatedTimetables);
+        reversedList.Reverse();
+        
+        foreach (var timetable in reversedList)
         {
             output.AddRange(timetable.ToColoredStringList());
             output.Add(new ColoredString("\n"));
         }
+        
+        output.Add(new ColoredString("The timetable right above is the best generated one. Scroll up to see more options.\n", ConsoleColor.Cyan));
+        output.Add(new ColoredString("Blue lessons are theoretical", ConsoleColor.Blue));
+        output.Add(new ColoredString(", "));
+        output.Add(new ColoredString("red lessons are practical.\n", ConsoleColor.Red));
         
         output.Add(new ColoredString("\n"));
         output.Add(new ColoredString("Total generated timetables: "));
@@ -91,6 +104,10 @@ public class GenerationResultEntity
         output.Add(new ColoredString("\n"));
         output.Add(new ColoredString("Total evaluated timetables: "));
         output.Add(new ColoredString(EvaluatedTimetablesCount.ToString(), ConsoleColor.Green));
+        
+        output.Add(new ColoredString("\n"));
+        output.Add(new ColoredString("Timetables better than original (current): "));
+        output.Add(new ColoredString(EvaluatedTimetablesCount.ToString(), ConsoleColor.Magenta));
             
         return output;
     }
