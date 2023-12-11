@@ -18,7 +18,6 @@ if (secondsToLiveInput == null || !int.TryParse(secondsToLiveInput, out _))
 {
     throw new ArgumentException("The user was allowed to input a disallowed value.");
 }
-
 var secondsToLive = int.Parse(secondsToLiveInput);
 
 var resultsToKeepInput = ColoredConsole.GetInputFromUser(
@@ -38,7 +37,6 @@ if (resultsToKeepInput == null || !int.TryParse(resultsToKeepInput, out _))
 {
     throw new ArgumentException("The user was allowed to input a disallowed value.");
 }
-
 var resultsToKeep = int.Parse(resultsToKeepInput);
 
 var threadManager = new ThreadManager(secondsToLive, resultsToKeep);

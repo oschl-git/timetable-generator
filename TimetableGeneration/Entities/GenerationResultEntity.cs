@@ -61,7 +61,6 @@ public class GenerationResultEntity
         lock (locker)
         {
             EvaluatedTimetablesCount++;
-
             if (evaluatedTimetable.Score > originalTimetableScore) TimetablesBetterThanOriginalCount++;
             
             if (evaluatedTimetables.Count > 0 && evaluatedTimetable.Score <= evaluatedTimetables[^1].Score) return;
@@ -107,7 +106,7 @@ public class GenerationResultEntity
         
         output.Add(new ColoredString("\n"));
         output.Add(new ColoredString("Timetables better than original (current): "));
-        output.Add(new ColoredString(EvaluatedTimetablesCount.ToString(), ConsoleColor.Magenta));
+        output.Add(new ColoredString(TimetablesBetterThanOriginalCount.ToString(), ConsoleColor.Magenta));
             
         return output;
     }
