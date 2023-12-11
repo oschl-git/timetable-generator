@@ -31,7 +31,7 @@ public abstract class Generator
                 foreach (var lesson in entry)
                 {
                     var dayLength = timetable.GetDayLengthByIndex(index);
- 
+
                     var includeLunchBreak = timetable.GetDayLengthByIndex(index) == 6;
                     if (includeLunchBreak)
                     {
@@ -55,6 +55,17 @@ public abstract class Generator
                 timetable.Days.ElementAt(i).Value[6] = timetable.Days.ElementAt(i).Value[7];
                 timetable.Days.ElementAt(i).Value[7] = null;
             }
+        }
+
+        // Introduce more randomness by swapping random fields
+        for (var i = random.Next(0, 7); i < 7; i++)
+        {
+            var day = random.Next(0, 5);
+            var hour = random.Next(0, 9);
+            var newHour = random.Next(0, 9);
+
+            (timetable.Days.ElementAt(day).Value[newHour], timetable.Days.ElementAt(day).Value[hour]) =
+                (timetable.Days.ElementAt(day).Value[hour], timetable.Days.ElementAt(day).Value[newHour]);
         }
 
         return timetable;

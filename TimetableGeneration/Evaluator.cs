@@ -23,6 +23,10 @@ public abstract class Evaluator
         score += RateDayLengths(timetable);
         score += PenaliseImportantSubjectsAsFirstHours(timetable);
         score += PenaliseMultipleDifficultSubjectsInDay(timetable);
+        score += PenaliseMultipleHourBreaks(timetable);
+        score += PenaliseMultipleBreaksInADay(timetable);
+        score += PenaliseConsecutiveDifficultSubjects(timetable);
+        score += RewardFreeFirstHours(timetable);
 
         return score;
     }
@@ -58,7 +62,11 @@ public abstract class Evaluator
             foreach (var lesson in day)
             {
                 if (lesson == null) continue;
-                if (lessonsHad.Contains(lesson) && lastLesson != lesson) score -= 150;
+                if (lessonsHad.Contains(lesson) && lastLesson != lesson)
+                {
+                    if (lesson.IsPracticalLesson) score -= 400;
+                    else score -= 70;
+                }
 
                 lessonsHad.Add(lesson);
                 lastLesson = lesson;
@@ -85,7 +93,7 @@ public abstract class Evaluator
 
                 if (lesson == lastLesson)
                 {
-                    score += 50;
+                    score += 10;
                 }
                 else if (lastLesson != null)
                 {
@@ -97,13 +105,13 @@ public abstract class Evaluator
                     switch (floorDifference)
                     {
                         case 1:
-                            score -= 50;
+                            score -= 10;
                             break;
                         case 2:
-                            score -= 100;
+                            score -= 20;
                             break;
                         case >= 3:
-                            score -= 150;
+                            score -= 50;
                             break;
                     }
                 }
@@ -123,7 +131,7 @@ public abstract class Evaluator
         {
             if (day[5] != null && day[6] != null && day[7] != null)
             {
-                score -= 500;
+                score -= 1000;
             }
             else if (day[5] == null) // Bonus for best lunch break hour
             {
@@ -224,4 +232,96 @@ public abstract class Evaluator
         return score;
     }
 
+    private static int PenaliseMultipleHourBreaks(TimetableEntity timetable)
+    {
+        var score = 0;
+
+        foreach (var day in timetable.Days.Values)
+        {
+            var consecutiveNullHourCount = 0;
+            foreach (var lesson in day)
+            {
+                if (lesson == null) consecutiveNullHourCount++;
+                else
+                {
+                    if (consecutiveNullHourCount >= 2)
+                    {
+                        score -= 1000;
+                        return score;
+                    }
+
+                    consecutiveNullHourCount = 0;
+                }
+            }
+        }
+
+        return score;
+    }
+
+    private static int PenaliseMultipleBreaksInADay(TimetableEntity timetable)
+    {
+        var score = 0;
+
+        foreach (var day in timetable.Days.Values)
+        {
+            var breakCount = 0;
+            for (var i = 0; i < day.Length - 1; i++)
+            {
+                if (day.ElementAt(i) == null && day.ElementAt(i + 1) != null) breakCount++;
+            }
+
+            if (breakCount > 1) score -= 1000;
+        }
+
+        return score;
+    }
+
+    private static int PenaliseConsecutiveDifficultSubjects(TimetableEntity timetable)
+    {
+        Subjects.SubjectTypes[] difficultSubjects =
+        {
+            Subjects.SubjectTypes.M,
+            Subjects.SubjectTypes.AM,
+            Subjects.SubjectTypes.DS,
+            Subjects.SubjectTypes.PSS,
+        };
+
+        var score = 0;
+
+        foreach (var day in timetable.Days.Values)
+        {
+            LessonEntity? lastLesson = null;
+            List<LessonEntity> lessonsHad = new();
+
+            foreach (var lesson in day)
+            {
+                if (lesson == null) continue;
+                if (difficultSubjects.Contains(lesson.Subject) && lastLesson == lesson) score -= 100;
+
+                lessonsHad.Add(lesson);
+                lastLesson = lesson;
+            }
+        }
+
+        return score;
+    }
+
+    private static int RewardFreeFirstHours(TimetableEntity timetable)
+    {
+        var score = 0;
+
+        foreach (var day in timetable.Days.Values)
+        {
+            if (day[0] == null && day[1] == null)
+            {
+                score += 890;
+            }
+            if (day[0] == null)
+            {
+                score += 610;
+            }
+        }
+
+        return score;
+    }
 }

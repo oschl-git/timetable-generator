@@ -29,11 +29,11 @@ public class ThreadManager
     
     private void CreateThreads()
     {
-        var generatorThreadCount = Environment.ProcessorCount / 2;
-        var evaluatorThreadCount = Environment.ProcessorCount - generatorThreadCount - 1;
+        var evaluatorThreadCount = Environment.ProcessorCount / 3;
+        var generatorThreadCount = Environment.ProcessorCount - evaluatorThreadCount;
 
-        if (generatorThreadCount < 1) generatorThreadCount = 1;
         if (evaluatorThreadCount < 1) evaluatorThreadCount = 1;
+        if (generatorThreadCount < 1) generatorThreadCount = 1;
         
         threads.Add(new Thread(() =>
         {
