@@ -8,11 +8,12 @@ public class OrderedList<T> : List<T>
 {
     /// <summary>
     /// Adds item to its correct sorted position by the default comparer.
+    /// https://stackoverflow.com/a/46294791
     /// </summary>
     /// <param name="item">The item to add.</param>
     public new void Add(T item)
     {
         var x = BinarySearch(item);
-        Insert((x >= 0) ? x : ~x, item);
+        Insert(x >= 0 ? x : ~x, item);
     }
 }
