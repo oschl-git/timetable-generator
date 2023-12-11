@@ -31,7 +31,7 @@ public class ThreadManager
     {
         var evaluatorThreadCount = Environment.ProcessorCount / 3;
         var generatorThreadCount = Environment.ProcessorCount - evaluatorThreadCount;
-
+        
         if (evaluatorThreadCount < 1) evaluatorThreadCount = 1;
         if (generatorThreadCount < 1) generatorThreadCount = 1;
         
@@ -42,6 +42,7 @@ public class ThreadManager
 
         for (var i = 0; i < generatorThreadCount; i++)
         {
+            Console.WriteLine("Started generator.");
             threads.Add(new Thread(() =>
             {
                 while (Running)
@@ -53,6 +54,7 @@ public class ThreadManager
 
         for (var i = 0; i < evaluatorThreadCount; i++)
         {
+            Console.WriteLine("Started evaluator.");
             threads.Add(new Thread(() =>
             {
                 while (Running)
