@@ -27,6 +27,7 @@ public abstract class Evaluator
         score += PenaliseMultipleBreaksInADay(timetable);
         score += PenaliseConsecutiveDifficultSubjects(timetable);
         score += RewardFreeFirstHours(timetable);
+        score += RewardNoAfternoonLessons(timetable);
 
         return score;
     }
@@ -61,7 +62,12 @@ public abstract class Evaluator
 
             foreach (var lesson in day)
             {
-                if (lesson == null) continue;
+                if (lesson == null)
+                {
+                    lastLesson = null;
+                    continue;
+                }
+
                 if (lessonsHad.Contains(lesson) && lastLesson != lesson)
                 {
                     if (lesson.IsPracticalLesson) score -= 400;
@@ -314,11 +320,27 @@ public abstract class Evaluator
         {
             if (day[0] == null && day[1] == null)
             {
-                score += 890;
+                score += 230;
             }
+
             if (day[0] == null)
             {
-                score += 610;
+                score += 110;
+            }
+        }
+
+        return score;
+    }
+
+    private static int RewardNoAfternoonLessons(TimetableEntity timetable)
+    {
+        var score = 0;
+
+        foreach (var day in timetable.Days.Values)
+        {
+            if (day[7] == null && day[8] == null)
+            {
+                score += 340;
             }
         }
 

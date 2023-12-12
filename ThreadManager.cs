@@ -42,7 +42,6 @@ public class ThreadManager
 
         for (var i = 0; i < generatorThreadCount; i++)
         {
-            Console.WriteLine("Started generator.");
             threads.Add(new Thread(() =>
             {
                 while (Running)
@@ -54,7 +53,6 @@ public class ThreadManager
 
         for (var i = 0; i < evaluatorThreadCount; i++)
         {
-            Console.WriteLine("Started evaluator.");
             threads.Add(new Thread(() =>
             {
                 while (Running)
