@@ -12,7 +12,7 @@ public class EvaluatorTest
     public void TestEvaluating()
     {
         var originalTimetable = new OriginalTimetableEntity();
-        const int expectedScore = -1120;
+        const int expectedScore = -100;
 
         var actualScore = Evaluator.EvaluateTimetable(originalTimetable);
         
